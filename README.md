@@ -9,6 +9,8 @@ Build enrivonment: Arduino 1.6.12
 Toolset: esp8266 by ESP8266 Community version 2.4.0  
 OS: Windows (macOS coming soon)
 
+Edit: Now supported for ESP8266 2.5.0
+
 ## How to use.
 
 #### Install all components
