@@ -16,7 +16,7 @@ macro(arduino)
     file(GLOB_RECURSE CORE_ASM_ITEMS "${HARDWARE_ROOT}/cores/esp8266/*.S")
     file(GLOB_RECURSE CORE_C_ITEMS "${HARDWARE_ROOT}/cores/esp8266/*.c")
     file(GLOB_RECURSE CORE_CXX_ITEMS "${HARDWARE_ROOT}/cores/esp8266/*.cpp")
- 
+    
     # create core library
     add_library(arduino_core STATIC ${CORE_ASM_ITEMS} ${CORE_C_ITEMS} ${CORE_CXX_ITEMS})
 
@@ -26,7 +26,7 @@ macro(arduino)
             ${HARDWARE_ROOT}/tools/sdk/lwip2/include
             ${HARDWARE_ROOT}/tools/sdk/libc/xtensa-lx106-elf/include
             ${HARDWARE_ROOT}/cores/esp8266
-            ${HARDWARE_ROOT}/variants/d1_mini
+            ${HARDWARE_ROOT}/variants/nodemcu
             )
 
 
@@ -40,13 +40,16 @@ macro(arduino)
 	    -DLWIP_FEATURES=1
 	    -DLWIP_IPV6=0
             -DARDUINO=10612
-            -DARDUINO_ESP8266_GENERIC
+            -DARDUINO_ESP8266_NODEMCU
             -DARDUINO_ARCH_ESP8266
-            -DARDUINO_BOARD="ESP8266_GENERIC"
+            -DARDUINO_BOARD="ESP8266_NODEMCU"
             -DESP8266
 	    -DVTABLES_IN_FLASH
 	    -DNONOSDK221=1
+	    -DFLASHMODE_DIO
+	    -DLED_BUILTIN=2
             )
+
     target_compile_definitions(arduino_core PUBLIC ${COMPILE_DEFS})
 
     
@@ -96,6 +99,11 @@ macro(arduino)
     endforeach()
     # exclude header directories duplicates
     list(REMOVE_DUPLICATES LIBRARY_INCLUDE_DIRECTORIES)
+
+    # costum target for pre linking to generate local.eagle.app.v6.common.ld
+    add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK COMMAND ${CMAKE_C_COMPILER} -CC -E -P -DVTABLES_IN_FLASH "${HARDWARE_ROOT}/tools/sdk/ld/eagle.app.v6.common.ld.h" "${HARDWARE_ROOT}/tools/sdk/ld/local.eagle.app.v6.common.ld")
+
+    target_link_directories(${PROJECT_NAME} PUBLIC "${HARDWARE_ROOT}/tools/sdk/ld/")
 
     # and custom command to create bin file
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
