@@ -56,8 +56,8 @@ link_directories(
 
 #setup flags
 set(COMMON_FLAGS "-w -g -Os -mlongcalls -ffunction-sections -fdata-sections -MMD -mtext-section-literals -falign-functions=4")
-set(CMAKE_CXX_FLAGS "-fno-exceptions -fno-rtti -std=c++11 ${COMMON_FLAGS}")
-set(CMAKE_C_FLAGS "-Wpointer-arith -Wno-implicit-function-declaration -Wl,-EL -fno-inline-functions -nostdlib ${COMMON_FLAGS} -std=gnu99 -fno-exceptions")
+set(CMAKE_CXX_FLAGS "-fno-rtti -std=c++11 ${COMMON_FLAGS}")
+set(CMAKE_C_FLAGS "-Wpointer-arith -Wno-implicit-function-declaration -Wl,-EL -fno-inline-functions -nostdlib ${COMMON_FLAGS} -std=gnu99 ")
 set(CMAKE_ASM_FLAGS "-x assembler-with-cpp ${COMMON_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS
         "-nostdlib -Wl,--no-check-sections -u call_user_start -u _printf_float -u _scanf_float -Wl,-static -Teagle.flash.${FLASH_SIZE}.ld -Wl,--gc-sections -Wl,-wrap,system_restart_local -Wl,-wrap,spi_flash_read")
