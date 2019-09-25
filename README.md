@@ -3,17 +3,15 @@
 A simple way to develop applications for ESP8266 using Arduino libraries, inside any
 development environment supporting CMake (created for CLion).
 
-### Currently supported:
-
-Build enrivonment: Arduino 1.6.12  
-Toolset: esp8266 by ESP8266 Community version 2.4.0  
-OS: Windows (macOS coming soon)
-
-Edit: Now supported for ESP8266 2.5.0
+## Tested on:
+Build environment: Arduino 1.6.12
+Toolset: esp8266 by ESP8266 Community version 2.5.2
+OS: macOS Mojave
+(CMake Project targets Nodemcu ESP8266)
 
 ## How to use.
 
-#### Install all components
+### Install all components
 
 - Install Arduino
 - Open preferences window
@@ -22,7 +20,7 @@ Edit: Now supported for ESP8266 2.5.0
 
 All toolchains and libraries are installed!
 
-##### Create new CMake Project
+### Create new CMake Project
 
 Just create CMakeLists.txt with following contents:
 ```
@@ -39,3 +37,16 @@ The top lines is standard one, you can write it as you want. All you need -
 is create any executable, and call arduino macor with executable in as a first
 parameter and any used arduino libraries as other parameters. Aaaand. Build it.  
 Finish.
+
+### Flash
+
+CMake project will add a flash target to makefile for flashing binary to a nodemcu esp8266
+Add following Options for right flashing:
+RESET_METHOD (none, nodemcu, ck, wifio - DEFAULT: 'none')
+BAUD_RATE (DEFAULT: 115200)
+PORT (DEFAULT ON OSX: /dev/tty.usbserial - DEFAULT ON WINDOWS: COM1)
+
+Set this variables like this:
+```
+cmake -DRESET_METHOD=nodemcu -DBAUD_RATE=921600 -DPORT=/dev.tty.SLAB_USBtoUART ..
+```
