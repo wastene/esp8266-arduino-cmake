@@ -1,4 +1,4 @@
-include(cmake/esp8266.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/esp8266.cmake)
 
 # macro arduino
 # usage:
