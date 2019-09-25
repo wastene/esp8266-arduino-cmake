@@ -93,7 +93,7 @@ macro(arduino)
             list(APPEND LIBRARY_INCLUDE_DIRECTORIES ${HEADER_DIRECTORY})
         endforeach()
 	add_library(${ITEM} ${LIBRARY_S_FILES} ${LIBRARY_C_FILES} ${LIBRARY_X_FILES})
-	target_include_directories(${ITEM} PUBLIC ${LIBRARY_HOME}/ ${LIBRARY_HOME}/src/) 
+	include_directories(${LIBRARY_HOME}/ ${LIBRARY_HOME}/src/) 
 	target_compile_definitions(${ITEM} PUBLIC ${COMPILE_DEFS})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${ITEM})
     endforeach()
@@ -101,14 +101,14 @@ macro(arduino)
     list(REMOVE_DUPLICATES LIBRARY_INCLUDE_DIRECTORIES)
 
     # costum target for pre linking to generate local.eagle.app.v6.common.ld
-    add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK COMMAND ${CMAKE_C_COMPILER} -CC -E -P -DVTABLES_IN_FLASH "${HARDWARE_ROOT}/tools/sdk/ld/eagle.app.v6.common.ld.h" "${HARDWARE_ROOT}/tools/sdk/ld/local.eagle.app.v6.common.ld")
+    add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK COMMAND ${CMAKE_C_COMPILER} -CC -E -P -DVTABLES_IN_FLASH "${HARDWARE_ROOT}/tools/sdk/ld/eagle.app.v6.common.ld.h" -o "${HARDWARE_ROOT}/tools/sdk/ld/local.eagle.app.v6.common.ld")
 
     target_link_directories(${PROJECT_NAME} PUBLIC "${HARDWARE_ROOT}/tools/sdk/ld/")
 
-    # and custom command to create bin file
+    # command to create bin file (2.5.2)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${ESPTOOL_APP} -eo ${HARDWARE_ROOT}/bootloaders/eboot/eboot.elf -bo $<TARGET_FILE_DIR:${PROJECT_NAME}>/${PROJECT_NAME}.bin -bm dio -bf 40 -bz 4M -bs .text -bp 4096 -ec -eo $<TARGET_FILE:firmware> -bs .irom0.text -bs .text -bs .data -bs .rodata -bc -ec
-            COMMENT "Building ${PROJECT_NAME}> bin file")
+		COMMAND "${ARDUINO_ESP8266_HOME}/tools/python/3.7.2-post1/python" "${HARDWARE_ROOT}/tools/elf2bin.py" --eboot "${HARDWARE_ROOT}/bootloaders/eboot/eboot.elf" --app $<TARGET_FILE:firmware> --flash_mode dio --flash_freq 40 --flash_size 4M --path "${TOOLCHAIN_BIN}" --out $<TARGET_FILE_DIR:${PROJECT_NAME}>/${PROJECT_NAME}.bin
+		COMMENT "Building ${PROJECT_NAME}> bin file")
 
     ## For Flashing    
     if(NOT RESET_METHOD)
