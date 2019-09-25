@@ -47,7 +47,6 @@ macro(arduino)
 	    -DVTABLES_IN_FLASH
 	    -DNONOSDK221=1
 	    -DFLASHMODE_DIO
-	    -DLED_BUILTIN=2
             )
 
     target_compile_definitions(arduino_core PUBLIC ${COMPILE_DEFS})
