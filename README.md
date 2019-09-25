@@ -4,10 +4,10 @@ A simple way to develop applications for ESP8266 using Arduino libraries, inside
 development environment supporting CMake (created for CLion).
 
 ## Tested on:
-Build environment: Arduino 1.6.12
-Toolset: esp8266 by ESP8266 Community version 2.5.2
-OS: macOS Mojave
-(CMake Project targets Nodemcu ESP8266)
+Build environment: Arduino 1.6.12  
+Toolset: esp8266 by ESP8266 Community version 2.5.2  
+OS: macOS Mojave  
+(CMake Project targets Nodemcu ESP8266)  
 
 ## How to use.
 
